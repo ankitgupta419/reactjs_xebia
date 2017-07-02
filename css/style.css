@@ -117,3 +117,28 @@ body {
     width: 100%;
     font-size:32px;
 }
+
+.loginProfile{
+    width:100%;
+}
+.userName{
+    width: 80%;
+    float: left;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 500;
+}
+.logoutOption{
+    width: 10%;
+    float: right;
+    cursor: pointer;
+    border: 2px solid #000;
+    padding: 5px;
+    background: red;
+    border-radius: 10px;
+    color: #000;
+}
+.logoutButton{
+    float: right;
+    cursor: pointer;
+}

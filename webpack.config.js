@@ -25,6 +25,9 @@ module.exports = {
     
     resolve: {
         extensions: ['.js', '.jsx', '.css'],
+        alias: {
+            joi: 'joi-browser'
+        }
     },
     devServer: {
         historyApiFallback: true,

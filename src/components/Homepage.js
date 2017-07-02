@@ -12,7 +12,6 @@ class Homepage extends Component{
 		 	allPlanets:[],
 		 	searchValue:'',
 		 	show:false,
-		 	userName:props.params.username,
 		 	planetContent:[],
 		 	nextApiCall:'',
 		 	onePlanet:{},
@@ -206,7 +205,13 @@ class Homepage extends Component{
 
 		return(
 			<div className="searchResultsData">
-				<h2 className="text-center">Hi {this.state.userName}</h2>
+				<div className="loginProfile">
+					<div className="userName">Hi ANKIT</div>
+					
+					<button type="button" className="btn btn-danger logoutButton"><Glyphicon glyph="log-out"/> Logout</button>
+					{/*<div className="logoutOption"><Glyphicon glyph="log-out"/> logout </div>*/}
+					<div className="clr"></div>
+				</div>
 		        <br/>
 		        <div className="searchBoxLabel">
 					<input className="searchBox" ref="searchInput" type="text" placeholder="Search planets" onChange={this.input} onKeyPress={this.showAllPlanetsResults} />

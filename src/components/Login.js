@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
 import {default as If} from './If';
+import * as jwt from 'jsonwebtoken';
+
 class Login extends Component{
 	constructor(props){
 		super(props);
@@ -65,7 +67,12 @@ class Login extends Component{
 		}
 		for(var i=0;i<allUserData.length;i++){
 			if(allUserData[i].name==input.name && allUserData[i].birth_year==input.birth_year ){
-				browserHistory.push('/homepage/'+input.name)
+				let token = jwt.sign({
+					name: input.name,
+					exp: 60 * 60 * 24
+					}, 'xebia');
+				sessionStorage.setItem('loggedUser',token);
+				browserHistory.push('/homepage')
 			}
 			else
 			{
