@@ -2,9 +2,10 @@
   "name": "Xebia",
   "version": "1.0.0",
   "description": "React application for xebia",
-  "main": "Main.js",
+  "main": "src/Main.js",
   "scripts": {
-    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --watch --port 2001"
+    "compile": "webpack",
+    "start": "node server.js"
   },
   "config": {
     "source": "src/"
@@ -32,8 +33,10 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "express": "^4.15.3",
     "imports-loader": "^0.7.1",
     "node-sass": "^4.5.2",
-    "react-bootstrap": "^0.31.0"
+    "react-bootstrap": "^0.31.0",
+    "webpack-dev-middleware": "^1.11.0"
   }
 }
