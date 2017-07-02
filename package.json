@@ -1,0 +1,39 @@
+{
+  "name": "Xebia",
+  "version": "1.0.0",
+  "description": "React application for xebia",
+  "main": "Main.js",
+  "scripts": {
+    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --watch --port 2001"
+  },
+  "config": {
+    "source": "src/"
+  },
+  "author": "Ankit",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "babel": "^6.23.0",
+    "babel-core": "^6.2.1",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-react": "^6.1.18",
+    "babel-preset-stage-1": "^6.1.18",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "lodash": "^3.10.1",
+    "path": "^0.12.7",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-hot-loader": "^1.3.1",
+    "react-load-script": "0.0.2",
+    "react-router": "^2.8.1",
+    "webpack": "^2.5.1",
+    "webpack-dev-server": "^2.4.5"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "imports-loader": "^0.7.1",
+    "node-sass": "^4.5.2",
+    "react-bootstrap": "^0.31.0"
+  }
+}
