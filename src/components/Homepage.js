@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 import axios from 'axios';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 import OnePlanetContent from './OnePlanetContent';
 import SearchResultContent from './SearchResultContent';
 // import { default as Input } from 'react-bootstrap';
 import {default as If} from './If';
+import * as jwt from 'jsonwebtoken'; 
+
 class Homepage extends Component{
 	constructor(props){
 		super(props);
@@ -17,7 +20,11 @@ class Homepage extends Component{
 		 	onePlanet:{},
 		 	showOnePlanet:false,
 			showSearchResult:false,
-			noResult:false
+			noResult:false,
+			loggedUser: {},
+			searchLabel: '',
+			searchDisable: false,
+			popUpSearch:false
 		}
 		this.input = this.input.bind(this);
 		this.callSearch = this.callSearch.bind(this);
@@ -26,9 +33,13 @@ class Homepage extends Component{
 		this.showAllPlanetsResults = this.showAllPlanetsResults.bind(this); 
 		this.allSearchResultMore = this.allSearchResultMore.bind(this); 
 		this.allSearchRes = this.allSearchRes.bind(this); 
+		this.closePopUp = this.closePopUp.bind(this); 
 		
 	}
-	
+	componentWillMount(){
+		let loggedUser = jwt.decode(sessionStorage.getItem('loggedUser'));
+		this.setState({loggedUser: loggedUser});
+	}
 	input(e){
       let self=this
       let searchValue=this.refs.searchInput.value;
@@ -118,15 +129,34 @@ class Homepage extends Component{
 		var SearchVal=event.target.value
 		var self=this
 		if(event.charCode==13){
-			this.setState({
-				planetContent:[],
-				show:false,
-				showOnePlanet:false,
-				showSearchResult:true
-			},function(){
-				self.allSearchRes(SearchVal,self.state.planetContent)
-			})
-	              
+			let searchHandler = JSON.parse(sessionStorage.getItem('searchHandler')),
+				loggedUser = this.state.loggedUser, currentEpochTime = Math.floor(new Date() / 1000);
+			if(searchHandler!=null && searchHandler.exp>currentEpochTime){
+				if(searchHandler.count >= 15 && loggedUser.name != "Luke Skywalker"){
+					this.setState({searchDisable: true,popUpSearch:true})
+				}else{
+					searchHandler.count = searchHandler.count+1;
+					sessionStorage.setItem('searchHandler', JSON.stringify(searchHandler));
+					this.setState({searchDisable: false});
+				}
+			}else{
+				searchHandler = {
+					count: 1, exp: Math.floor(Date.now() / 1000) + 60
+				}
+				sessionStorage.setItem('searchHandler', JSON.stringify(searchHandler));
+				this.setState({searchDisable: false});
+			}
+			if(!this.state.searchDisable){
+				this.setState({
+					planetContent:[],
+					show:false,
+					showOnePlanet:false,
+					showSearchResult:true,
+					searchLabel: SearchVal
+				},function(){
+					self.allSearchRes(SearchVal,self.state.planetContent)
+				})
+	        }
 	    }
         	
     }
@@ -193,6 +223,17 @@ class Homepage extends Component{
 			});
 		}
 	}
+	logOut(){
+		sessionStorage.removeItem('loggedUser');
+		sessionStorage.removeItem('searchHandler');
+		browserHistory.push('/login');
+	}
+	
+	closePopUp(){
+		this.setState({
+			popUpSearch:false
+		})
+	}
 	render(){
 		// console.log(this.state.searchValue)
 		var self=this
@@ -206,9 +247,9 @@ class Homepage extends Component{
 		return(
 			<div className="searchResultsData">
 				<div className="loginProfile">
-					<div className="userName">Hi ANKIT</div>
+					<div className="userName">Hi {this.state.loggedUser.name}</div>
 					
-					<button type="button" className="btn btn-danger logoutButton"><Glyphicon glyph="log-out"/> Logout</button>
+					<button type="button" className="btn btn-danger logoutButton" onClick={self.logOut}><Glyphicon glyph="log-out"/> Logout</button>
 					{/*<div className="logoutOption"><Glyphicon glyph="log-out"/> logout </div>*/}
 					<div className="clr"></div>
 				</div>
@@ -229,14 +270,20 @@ class Homepage extends Component{
 		                	<div className="searchResultLabelEnd">That's All Folks</div>
 		                </If>	
  					</div>
-	 			</If>		
+	 			</If>
+	 			<If test={self.state.popUpSearch}>
+					<div className="popUp">
+						<div className="popUpLabel">You can search only 15 times in 60 seconds</div>
+						<button className="popUpButton" onClick={this.closePopUp}>Ok</button>
+					</div>
+				</If>		
 				<br/>
 				<br/> 
-				<If test={self.state.showOnePlanet}>
+				<If test={self.state.showOnePlanet && self.state.searchDisable==false}>
 					<OnePlanetContent onePlanet={this.state.onePlanet}/>
 				</If>
 				<If test={self.state.showSearchResult}>
-					<SearchResultContent searchValue={this.state.searchValue} planetContent={this.state.planetContent} noResult={self.state.noResult}/>
+					<SearchResultContent searchValue={this.state.searchLabel} planetContent={this.state.planetContent} noResult={self.state.noResult}/>
 				</If>
 				
 				

@@ -106,7 +106,7 @@ class Login extends Component{
 		                <br/>
 		                <br/>
 		                <div className="align-center">
-		                    <button type="submit" className="btn btn-default" id="login" onClick={this.signIn}>Login</button>
+		                    <button type="submit" className="btn btn-lg btn-primary btn-block" id="login" onClick={this.signIn}>Login</button>
 		                </div>  
 			        </div>
 			    </div>
