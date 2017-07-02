@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Glyphicon from 'react-bootstrap/lib/Glyphicon'
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+import OnePlanetContent from './OnePlanetContent';
+import SearchResultContent from './SearchResultContent';
+// import { default as Input } from 'react-bootstrap';
 import {default as If} from './If';
 class Homepage extends Component{
 	constructor(props){
@@ -12,47 +15,21 @@ class Homepage extends Component{
 		 	userName:props.params.username,
 		 	planetContent:[],
 		 	nextApiCall:'',
-		 	counter:0,
-		 	IsSearch:true
+		 	onePlanet:{},
+		 	showOnePlanet:false,
+			showSearchResult:false,
+			noResult:false
 		}
 		this.input = this.input.bind(this);
 		this.callSearch = this.callSearch.bind(this);
 		this.seeMore = this.seeMore.bind(this);
 		this.addPlanets = this.addPlanets.bind(this); 
-		// this.userSearchRecord = this.userSearchRecord.bind(this); 
+		this.showAllPlanetsResults = this.showAllPlanetsResults.bind(this); 
+		this.allSearchResultMore = this.allSearchResultMore.bind(this); 
+		this.allSearchRes = this.allSearchRes.bind(this); 
 		
 	}
-	componentDidMount(){
-		var self=this
-		// self.userSearchRecord()
-		setTimeout(function(){
-	          // console.log(counter)
-	          // if(userName !='Luke Skywalker' && counter > 15) {
-	          //   		self.setState({
-	          //   			IsSearch:false
-	          //   		})
-	          // }
-			console.log("time up")
-	     
-	          
-	    },5000)
-		
-	}
-	// userSearchRecord(){
-	// 	var self=this;
-	// 	var userName=self.state.userName;
-	// 	var counter=self.state.counter
-	// 	setTimeout(function(){
-	//           console.log(counter)
-	//           if(userName !='Luke Skywalker' && counter > 15) {
-	//             		self.setState({
-	//             			IsSearch:false
-	//             		})
-	//           }
-
-	//           console.log("time up")
-	//       },10000)
-	// }
+	
 	input(e){
       let self=this
       let searchValue=this.refs.searchInput.value;
@@ -126,49 +103,113 @@ class Homepage extends Component{
 	}
 
 	addPlanets(item){
-		console.log("call func")
 		var self=this
-		var counter=this.state.counter;
-		counter +=1;
-		// console.log(counter)
-
-		var planetContent=this.state.planetContent
-		// console.log("query",self.state.IsSearch)
-		if(this.state.IsSearch==true){
-			planetContent.push(item)
-		}
-		
+		var onePlanet=this.state.onePlanet		
 		this.setState({
-			planetContent:planetContent,
-			counter:counter
+			onePlanet:item,
+			show:false,
+			showOnePlanet:true,
+			showSearchResult:false,
+			noResult:false
 		})
+		
+	}
+	showAllPlanetsResults(event){
+			// console.log(event.target.value)
+		var SearchVal=event.target.value
+		var self=this
+		if(event.charCode==13){
+			this.setState({
+				planetContent:[],
+				show:false,
+				showOnePlanet:false,
+				showSearchResult:true
+			},function(){
+				self.allSearchRes(SearchVal,self.state.planetContent)
+			})
+	              
+	    }
+        	
+    }
+   	allSearchRes(searchValue,planetContent){
+		var self=this
+		axios.get('http://swapi.co/api/planets/?search='+searchValue)
+		  	.then(function (response) {
+			    // console.log("start",response)
+			    for(let i=0;i<response.data.results.length;i++){
+			    	var planetInfo={
+		    			'name':response.data.results[i].name,
+			    		'population':response.data.results[i].population
+		    		}
+		    		planetContent.push(planetInfo)
+			    }
+		    	
+		    	// console.log(response.data.count)
+		    	if(response.data.count==0){
+		    		self.setState({
+		    			noResult:true
+		    			
+			    	})
+		    	}
+		    	else{
+		    		
+		    		self.setState({
+		    			planetContent:planetContent,
+		    			nextApiCall:response.data.next,
+		    			noResult:false
+			    	},function(){
+			    		self.allSearchResultMore();
+			    	})
+		    	}
+		    	
+		  	})
+		  	.catch(function (error) {
+	 	    	console.log(error);
+			});
+	}
+	allSearchResultMore(){
+		var self=this;
+		var nextApiCall=self.state.nextApiCall
+		if(nextApiCall!=null){
+			
+			var planetContent=self.state.planetContent
+			axios.get(nextApiCall)
+			  .then(function (response) {
+			    for(let i=0;i<response.data.results.length;i++){
+			    	var planetInfo={
+		    			'name':response.data.results[i].name,
+			    		'population':response.data.results[i].population
+		    		}
+			    	planetContent.push(planetInfo)
+			    }
+			    self.setState({
+			    	planetContent:planetContent,
+			    	nextApiCall:response.data.next
+			    },function(){
+			    	self.allSearchResultMore();
+			    }) 
+			  })
+			  .catch(function (error) {
+			    console.log(error);
+			});
+		}
 	}
 	render(){
+		// console.log(this.state.searchValue)
 		var self=this
-		// console.log("render",self.state.IsSearch)
-		// console.log("render",self.state.counter)
 		var allPlanets=JSON.parse(JSON.stringify(self.state.allPlanets))
-		
-		const Planets=self.state.planetContent.map(function(item,i){                 
-            return( 
-              <tr key={i}>
-                <td>{item.name}</td>
-                <td>{item.population}</td>
-              </tr>
-            )
-          })
-        const searchRes=allPlanets.map(function(item,i){                 
+		const searchRes=allPlanets.map(function(item,i){                 
             return( 
               <div className="searchResultLabel" onClick={self.addPlanets.bind(this,item)} key={i}>{item.name}</div>
             )
          })
-        
+
 		return(
 			<div className="searchResultsData">
 				<h2 className="text-center">Hi {this.state.userName}</h2>
 		        <br/>
 		        <div className="searchBoxLabel">
-					<input className="searchBox" ref="searchInput" type="text" placeholder="Search planets" onChange={this.input} />
+					<input className="searchBox" ref="searchInput" type="text" placeholder="Search planets" onChange={this.input} onKeyPress={this.showAllPlanetsResults} />
 					<span className="searchIcon">
 					    <Glyphicon glyph="search"/>
 					 </span>
@@ -184,18 +225,18 @@ class Homepage extends Component{
 		                </If>	
  					</div>
 	 			</If>		
-				 <br/> 
-				<table className="table">
-		            <thead>
-		              <tr>
-		                <th>Planet Name</th>
-		                <th>Population</th>
-		              </tr>
-		            </thead>
-		            <tbody>
-	               		{Planets} 
-		            </tbody>  
-		        </table> 
+				<br/>
+				<br/> 
+				<If test={self.state.showOnePlanet}>
+					<OnePlanetContent onePlanet={this.state.onePlanet}/>
+				</If>
+				<If test={self.state.showSearchResult}>
+					<SearchResultContent searchValue={this.state.searchValue} planetContent={this.state.planetContent} noResult={self.state.noResult}/>
+				</If>
+				
+				
+				 
+				
 			</div>
 		);
 	}

@@ -69,3 +69,51 @@ body {
     color:#4080ff;
     cursor: pointer;
 }
+
+.planetContent{
+    width: 98%;
+    height: 65px;
+    margin: 1%;
+    border: 2px solid #666;
+    padding: 15px;
+    border-radius: 20px;
+    background-color: #d3d3d3;
+}
+.planetName{
+    width: 50%;
+    float: left;
+}
+.planetPopulation{
+    width: 50%;
+    float: left;
+    font-size:18px;
+}
+.clr{
+    clear:both;
+}
+.bigFont{
+    font-size:24px;
+    color: red;
+}
+
+
+.onePlanetContent{
+    width: 60%;
+    height: 150px;
+    margin: 0 20%;
+    border: 2px solid #666;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #d3d3d3;
+
+}
+
+.onePlanetName{
+    width: 100%;
+    margin-bottom: 5%;
+    font-size:22px;
+}
+.onePlanetPopulation{
+    width: 100%;
+    font-size:32px;
+}
