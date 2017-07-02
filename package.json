@@ -2,9 +2,10 @@
   "name": "Xebia",
   "version": "1.0.0",
   "description": "React application for xebia",
-  "main": "Main.js",
+  "main": "src/main.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "webpack-dev-server --hot --progress --colors",
+    "build": "webpack --progress --colors"
   },
   "config": {
     "source": "src/"
@@ -37,7 +38,6 @@
     "express": "^4.15.3",
     "imports-loader": "^0.7.1",
     "node-sass": "^4.5.2",
-    "react-bootstrap": "^0.31.0",
-    "webpack-dev-middleware": "^1.11.0"
+    "react-bootstrap": "^0.31.0"
   }
 }

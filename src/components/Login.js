@@ -4,7 +4,6 @@ import axios from 'axios';
 import {default as If} from './If';
 class Login extends Component{
 	constructor(props){
-		console.log(props);
 		super(props);
 		 this.state={allUserData:[],wrongField:false}
 		 this.signIn=this.signIn.bind(this);
@@ -101,7 +100,7 @@ class Login extends Component{
 		                <br/>
 		                <div className="align-center">
 		                    <button type="submit" className="btn btn-default" id="login" onClick={this.signIn}>Login</button>
-		                </div>   
+		                </div>  
 			        </div>
 			    </div>
 			</div>

@@ -19,20 +19,40 @@ class Homepage extends Component{
 		this.callSearch = this.callSearch.bind(this);
 		this.seeMore = this.seeMore.bind(this);
 		this.addPlanets = this.addPlanets.bind(this); 
+		// this.userSearchRecord = this.userSearchRecord.bind(this); 
+		
 	}
 	componentDidMount(){
-		var self=this;
+		var self=this
+		// self.userSearchRecord()
 		setTimeout(function(){
-            console.log(self.state.counter)
-            if(self.state.userName !='Luke Skywalker' && self.state.counter > 15) {
-              		self.setState({
-              			IsSearch:false
-              		})
-            }
-
-            console.log("time up")
-        },10000)
+	          // console.log(counter)
+	          // if(userName !='Luke Skywalker' && counter > 15) {
+	          //   		self.setState({
+	          //   			IsSearch:false
+	          //   		})
+	          // }
+			console.log("time up")
+	     
+	          
+	    },5000)
+		
 	}
+	// userSearchRecord(){
+	// 	var self=this;
+	// 	var userName=self.state.userName;
+	// 	var counter=self.state.counter
+	// 	setTimeout(function(){
+	//           console.log(counter)
+	//           if(userName !='Luke Skywalker' && counter > 15) {
+	//             		self.setState({
+	//             			IsSearch:false
+	//             		})
+	//           }
+
+	//           console.log("time up")
+	//       },10000)
+	// }
 	input(e){
       let self=this
       let searchValue=this.refs.searchInput.value;
@@ -106,13 +126,14 @@ class Homepage extends Component{
 	}
 
 	addPlanets(item){
-		// console.log(item)
+		console.log("call func")
+		var self=this
 		var counter=this.state.counter;
 		counter +=1;
 		// console.log(counter)
 
 		var planetContent=this.state.planetContent
-		// console.log(this.state.IsSearch)
+		// console.log("query",self.state.IsSearch)
 		if(this.state.IsSearch==true){
 			planetContent.push(item)
 		}
@@ -124,7 +145,8 @@ class Homepage extends Component{
 	}
 	render(){
 		var self=this
-		// console.log(self.state.allPlanets)
+		// console.log("render",self.state.IsSearch)
+		// console.log("render",self.state.counter)
 		var allPlanets=JSON.parse(JSON.stringify(self.state.allPlanets))
 		
 		const Planets=self.state.planetContent.map(function(item,i){                 
