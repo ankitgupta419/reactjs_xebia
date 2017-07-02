@@ -2,7 +2,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var path = require('path');
 module.exports = {
-    entry: path.resolve(__dirname, 'src', 'Main.js'),
+    entry: path.resolve('Main.js'),
     output: {
         path: __dirname,
         publicPath: '/',
@@ -16,7 +16,11 @@ module.exports = {
             query: {
                 presets: ['react', 'es2015', 'stage-1'],
             }
-        }
+            },
+            {
+                test: /\.css$/,
+                loader: "style-loader!css-loader"
+            }, 
          ]
     },
     

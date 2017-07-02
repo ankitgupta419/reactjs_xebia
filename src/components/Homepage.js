@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon'
-import {default as If} from './../../utils/If';
+import {default as If} from './If';
 class Homepage extends Component{
 	constructor(props){
 		super(props);

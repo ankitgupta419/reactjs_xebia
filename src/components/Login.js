@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
-import {default as If} from './../../utils/If';
+import {default as If} from './If';
 class Login extends Component{
 	constructor(props){
+		console.log(props);
 		super(props);
 		 this.state={allUserData:[],wrongField:false}
 		 this.signIn=this.signIn.bind(this);
